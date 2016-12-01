@@ -5,6 +5,7 @@ class IDS
 {
 public:
   IDS(int port);
+  ~IDS();
   bool meetObstacle();
   void setupMe();
 private:

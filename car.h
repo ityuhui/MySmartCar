@@ -4,6 +4,7 @@
 #include "ids.h"
 
 class IDS;
+class Engine;
 
 class Car 
 {
@@ -11,12 +12,18 @@ public:
   Car();
   ~Car();
   void setupMe();
+  void beforeGo();
   void go();
+  void testEngine();
 
 private:
   void newSensors();
   void freeSensors();
   void setupSensors();
+
+  void newEngine();
+  void freeEngine();
+  void setupEngine();
 
   void forward();
   void backward();
@@ -27,6 +34,8 @@ private:
   IDS *leftSensor;
   IDS *midSensor;
   IDS *rightSensor;
+
+  Engine *engine;
 };
 
 #endif

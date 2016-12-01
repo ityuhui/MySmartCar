@@ -6,6 +6,11 @@ IDS::IDS(int port):m_port(port)
   
 }
 
+IDS::~IDS()
+{
+  
+}
+
 void
 IDS::setupMe()
 {

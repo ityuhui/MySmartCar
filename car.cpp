@@ -1,17 +1,31 @@
 #include "car.h"
 #include "definition.h"
+#include "ids.h"
+#include "engine.h"
+#include <Arduino.h>
 
-Car::Car():leftSensor(NULL),midSensor(NULL),rightSensor(NULL)
+Car::Car():
+leftSensor(NULL),
+midSensor(NULL),
+rightSensor(NULL),
+engine(NULL)
 {
   newSensors();
+  newEngine();
 }
 
 Car::~Car()
 {
   freeSensors();
+  freeEngine();
 }
 
-
+void
+Car::setupMe()
+{
+  setupSensors();
+  setupEngine();
+}
 
 void 
 Car::newSensors()
@@ -30,12 +44,6 @@ Car::freeSensors()
 }
 
 void
-Car::setupMe()
-{
-  setupSensors();
-}
-
-void
 Car::setupSensors()
 {
   leftSensor->setupMe();
@@ -43,24 +51,67 @@ Car::setupSensors()
   rightSensor->setupMe();
 }
 
+void
+Car::newEngine()
+{
+  engine = Engine::instance();
+}
+
+void
+Car::setupEngine()
+{
+  engine->setupMe();
+}
+
+void
+Car::freeEngine()
+{
+// engine is singleton, so it does not need to free
+}
+
+void
+Car::beforeGo()
+{
+  engine->stopEngine();
+  engine->setCarSpeed(); 
+}
 
 void
 Car::go()
 {
   if(leftSensor->meetObstacle()){
-      backward();
-      stopEngine();
-      turnRight();
+      engine->backward();
+      engine->stopEngine();
+      engine->turnRight();
   } else if(midSensor->meetObstacle()){
-      backward();
-      stopEngine();
-      turnRight();
+      engine->backward();
+      engine->stopEngine();
+      engine->turnRight();
   } else if(rightSensor->meetObstacle()){
-      backward();
-      stopEngine();
-      turnLeft();
+      engine->backward();
+      engine->stopEngine();
+      engine->turnLeft();
   } else {
-      forward();
+      engine->forward();
   }
+}
+
+void
+Car::testEngine()
+{
+  engine->backward();
+    delay(1000);
+  engine->stopEngine();
+    delay(1000);
+  engine->turnRight();
+    delay(1000);
+   engine->stopEngine();
+    delay(1000);
+   engine->turnLeft();
+    delay(1000);
+    engine->stopEngine();
+    delay(1000);
+    engine->forward();
+    delay(1000);
 }
 
